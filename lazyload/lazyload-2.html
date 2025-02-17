@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lazyload-2</title>
+  <style>
+    img {
+      width: 400px;
+      margin-bottom: 50px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <img data-src="../images/1.jfif" src="../images/loading.jfif" alt="xxx" />
+  <img data-src="../images/2.jfif" src="../images/loading.jfif" alt="xxx" />
+  <img data-src="../images/3.jfif" src="../images/loading.jfif" alt="xxx" />
+  <img data-src="../images/4.jfif" src="../images/loading.jfif" alt="xxx" />
+  <img data-src="../images/5.jfif" src="../images/loading.jfif" alt="xxx" />
+  <img data-src="../images/6.jfif" src="../images/loading.jfif" alt="xxx" />
+
+  <!-- 将 <script> 标签放在 <img> 标签之后（通常放在页面底部或 <body> 的末尾），可以确保：
+    DOM 元素加载完成：当脚本执行时，页面中的所有 <img> 标签已经被加载并解析，document.getElementsByTagName("img") 能够正确获取到所有图片。
+    属性初始化完成：图片的 data-src 和 src 属性已经初始化，offsetTop 的值也已经正确计算。 -->
+  <script>
+    //获取全部img标签
+    var images = document.getElementsByTagName("img");
+    
+    window.addEventListener("scroll", (e) => {
+      ergodic();
+    });
+    function ergodic() {
+      for (let i of images) {
+        //计算方式和第一种方式不同
+        // 作用：用来获取元素的位置以及大小相关的信息。
+        // 是DOM元素的一个方法，返回一个DOMRect对象，包含元素的大小及其相对于视口的位置。
+        // 该对象有6个属性：top,lef,right,bottom,width,height；
+        // {
+        //   bottom：430, //元素底部距离窗口顶部的距离 (等于 y + height)
+        //   height:340, //元素的高度
+        //   left:120, //元素左侧距离窗口左侧的距离
+        //   right:460, //元素右侧距离窗口左侧的距离(等于 x + width)
+        //   top:90, //元素顶部距离窗口的距离
+        //   width:340, //元素的宽度
+        //   x:120, //元素左上角相对于视口的横坐标
+        //   y:90 //元素左上角相对于视口的纵坐标
+        // }
+        if (i.getBoundingClientRect().top < window.innerHeight) {
+          let trueSrc = i.getAttribute("data-src");
+          i.setAttribute("src", trueSrc);
+        }
+      }
+    }
+    ergodic();
+  </script>
+</body>
+</html>

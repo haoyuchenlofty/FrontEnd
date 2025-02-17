@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throttle</title>
+</head>
+<body>
+    <input id="search" type="text" placeholder="请输入">
+    <button id="btn">提交</button>
+    <script>
+        const searchInput = document.getElementById('search');
+        const btn = document.getElementById('btn')
+        
+        const print = function() {
+            console.log('提交')
+        }
+        
+        /**
+         * 节流函数
+         * @param {Function} func - 需要节流的函数
+         * @param {number} wait - 时间间隔（毫秒），表示在这个时间间隔内最多执行一次函数
+         * @returns {Function} - 返回一个节流后的函数
+         */
+        function throttle(func, wait) {
+            // 上一次执行函数的时间戳，初始值为 0
+            let lastTime = 0;
+        
+            // 返回一个闭包函数，作为节流后的函数
+            return function (...args) {
+                // 获取当前时间戳
+                const now = Date.now();
+                // 如果当前时间与上一次执行时间的差值大于等于 wait，则执行函数
+                if (now - lastTime >= wait) {
+                    // 更新上一次执行函数的时间戳
+                    lastTime = now;
+                    // 调用原始函数，并传入参数
+                    func.apply(this, args);
+                }
+            };
+        }
+        
+        
+        const handleSearch = throttle(function() {
+            console.log('Sending request for:', this.value);
+        }, 1000);
+        
+        searchInput.addEventListener('keyup', handleSearch);
+        btn.addEventListener('click', throttle(print, 1000));
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debounce</title>
+</head>
+<body>
+    <input id="search" type="text" placeholder="请输入">
+    <button id="btn">提交</button>
+    <script>
+        const searchInput = document.getElementById('search');
+        const btn = document.getElementById('btn')
+        
+        const print = function() {
+            console.log('提交')
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+        
+        
+        const handleSearch = debounce(function() {
+            console.log('Sending request for:', this.value);
+        }, 500);
+        
+        searchInput.addEventListener('keyup', handleSearch);
+        btn.addEventListener('click', debounce(print, 500));
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lazyload-1</title>
+  <style>
+    img {
+      width: 400px;
+      margin-bottom: 50px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <img data-src="../images/1.jfif" src="../images/loading.jfif" alt="">
+  <img data-src="../images/2.jfif" src="../images/loading.jfif" alt="">
+  <img data-src="../images/3.jfif" src="../images/loading.jfif" alt="">
+  <img data-src="../images/4.jfif" src="../images/loading.jfif" alt="">
+  <img data-src="../images/5.jfif" src="../images/loading.jfif" alt="">
+  <img data-src="../images/6.jfif" src="../images/loading.jfif" alt="">
+
+  <!-- 将 <script> 标签放在 <img> 标签之后（通常放在页面底部或 <body> 的末尾），可以确保：
+  DOM 元素加载完成：当脚本执行时，页面中的所有 <img> 标签已经被加载并解析，document.getElementsByTagName("img") 能够正确获取到所有图片。
+  属性初始化完成：图片的 data-src 和 src 属性已经初始化，offsetTop 的值也已经正确计算。 -->
+  <script>
+    //获取全部img标签
+    var images = document.getElementsByTagName("img");
+    
+    window.addEventListener("scroll", (e) => {
+        //当发生滚动事件时调用ergodic事件
+        ergodic();
+    });
+    function ergodic() {
+      // 遍历每一张图
+      for (let i of images) {
+        // 判断当前图片是否在可视区内
+        // offsetTop：元素到offsetParent顶部的距离（当前元素顶部距离最近父元素顶部的距离）
+        // offsetTop 为元素距离顶部的距离；window.innerHeight 为当前窗口的高度；window.scrollY 为滚动距离；
+        if (i.offsetTop <= window.innerHeight + window.scrollY) {
+            // 获取自定义data-src属性的值
+            let trueSrc = i.getAttribute("data-src");
+            // 把值赋值给图片的src属性
+            i.setAttribute("src", trueSrc);
+        }
+      }
+    }
+    // 没发生滚动事件时也要先执行一次
+    ergodic();
+  </script>
+</body>
+</html>
